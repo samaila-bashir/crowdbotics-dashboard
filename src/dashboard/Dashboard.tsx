@@ -17,9 +17,7 @@ import RoutesConfig from './Routes.config';
 import { Route, Switch, Redirect} from "react-router-dom";
 import CustomToolbar from "../components/toolbar/toolbar";
 
-import ApplicationList from './application/application.list/List.application';
-import ApplicationEdit from './application/application.edit/Edit.component';
-import ApplicationView from './application/application.view/Application.view';
+import ApplicationRoute from './application/application.route';
 import Pricing from './pricing/Pricing';
 import Subscription from './subscription/Subscription';
 
@@ -112,14 +110,8 @@ function DashboardContent() {
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Switch>
-              <Route path="/dashboard/application-list">
-                <ApplicationList />
-              </Route>
-              <Route path="/dashboard/application-edit">
-                <ApplicationEdit />
-              </Route>
-              <Route path="/dashboard/application-view">
-                <ApplicationView />
+              <Route path="/dashboard/application">
+                <ApplicationRoute />
               </Route>
               <Route path="/dashboard/pricing">
                 <Pricing />
@@ -128,7 +120,7 @@ function DashboardContent() {
                 <Subscription />
               </Route>
 
-              <Redirect from="*" to="/dashboard/application-list" />
+              <Redirect from="*" to="/dashboard/application" />
             </Switch>
           </Container>
           <Copyright sx={{ pt: 4 }} />

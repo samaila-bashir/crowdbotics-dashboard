@@ -1,7 +1,4 @@
-import * as React from 'react';
-import Badge from '@mui/material/Badge';
 import MenuIcon from '@mui/icons-material/Menu';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import Toolbar from '@mui/material/Toolbar';
 import IconButton from '@mui/material/IconButton';
 import Typography from '@mui/material/Typography';
@@ -42,11 +39,6 @@ const ToolBar = (props: Props) => {
             >
               Dashboard
             </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
           </Toolbar>
     );
 }
