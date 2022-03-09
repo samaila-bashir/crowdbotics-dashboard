@@ -11,6 +11,14 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CustomLink from '../../components/styled.components/link.styles';
+import { Field, Form, Formik } from "formik";
+import Input from "../../components/form/Input";
+import * as Yup from "yup";
+
+const LoginSchema = Yup.object().shape({
+  email: Yup.string().email('Email email address is required.').required('required'),
+  password: Yup.string().required('required')
+});
 
 function Copyright(props: any) {
   return (
@@ -56,35 +64,56 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign In
-            </Button>
+          <Box component="div" sx={{ mt: 1 }}>
+
+          <Formik
+                initialValues={{
+                  email: '',
+                  password: ''
+                }}
+
+                validationSchema={LoginSchema}
+
+                onSubmit={values => {
+                  // same shape as initial values
+                  console.log(values);
+                }}
+                >
+                  
+                {({ submitForm,isValid }) => (
+                  <Form>
+
+                    <Field 
+                       type="email" 
+                       name="email" 
+                       label="Email Address" 
+                       component={ Input } 
+                    />
+
+                    <Field 
+                       type="password" 
+                       name="password" 
+                       label="Password" 
+                       component={ Input } 
+                    />
+
+                    
+                    <Button
+                      onClick={submitForm}
+                      fullWidth
+                      disabled={!isValid}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                     >
+                        Sign In
+                     </Button>
+
+                  </Form>
+                )}
+               
+                </Formik>
+          
+            
             <Grid container>
               <Grid item xs>
                 <CustomLink to="/auth/reset-password">
