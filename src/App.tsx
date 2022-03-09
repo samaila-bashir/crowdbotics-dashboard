@@ -2,18 +2,24 @@ import React from "react";
 import { BrowserRouter as Router, Route, Switch,Redirect} from "react-router-dom";
 import AuthRoute from "./auth/auth.route";
 
-import Application from "./dashboard/application/application.list/List.application";
+import Dashboard from "./dashboard/Dashboard";
 
 
 function App() {
+
+  const Authtoken = "sjdndweqkjmx,mnfnmda";
+
   return (
     <Router>
       <div className="app">
         <Switch>
-          <Route path="/">
+          <Route  path="/auth">
             <AuthRoute />
           </Route>
-          <Redirect from="*" to="/"/>
+          <Route path="/dashboard">
+            <Dashboard />
+          </Route>
+          <Redirect from="*" to="/dashboard"/>
         </Switch>
       </div>
     </Router>
