@@ -1,7 +1,8 @@
 import axios from "axios";
+import { ApplicationTypes, AppsRequestObject, AppResponseObject } from "../types/entities";
 
-const createApplication = async () => {
-
+const createApplication = async (application: AppsRequestObject) => {
+    
 }
 
 const getApplications = async () => {
