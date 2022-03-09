@@ -11,6 +11,16 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CustomLink from '../../components/styled.components/link.styles';
+import { Field, Form, Formik } from "formik";
+import Input from "../../components/form/Input";
+import * as Yup from "yup";
+
+const SignupFormSchema = Yup.object().shape({
+  firstName: Yup.string().required('required'),
+  lastName: Yup.string().required('required'),
+  email: Yup.string().email('Email email address is required.').required('required'),
+  password: Yup.string().required('required')
+});
 
 function Copyright(props: any) {
   return (
@@ -56,59 +66,77 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             Sign up
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  autoComplete="given-name"
-                  name="firstName"
-                  required
-                  fullWidth
-                  id="firstName"
-                  label="First Name"
-                  autoFocus
-                />
-              </Grid>
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  required
-                  fullWidth
-                  id="lastName"
-                  label="Last Name"
-                  name="lastName"
-                  autoComplete="family-name"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  id="email"
-                  label="Email Address"
-                  name="email"
-                  autoComplete="email"
-                />
-              </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="new-password"
-                />
-              </Grid>
-            </Grid>
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Sign Up
-            </Button>
+          <Box component="div" sx={{ mt: 3 }}>
+
+
+          <Formik
+                initialValues={{
+                  email: ''
+                }}
+
+                validationSchema={SignupFormSchema}
+
+                onSubmit={values => {
+                  // same shape as initial values
+                  console.log(values);
+                }}
+                >
+                  
+                {({ submitForm,isValid }) => (
+                  <Form>                    
+
+                    <Grid container spacing={2}>
+                      <Grid item xs={12} sm={6}>
+                          <Field 
+                              type="text" 
+                              name="firstName" 
+                              label="First Name" 
+                              component={ Input } 
+                          />
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Field 
+                            type="text" 
+                            name="lastName" 
+                            label="Last Name" 
+                            component={ Input } 
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field 
+                            type="email" 
+                            name="email" 
+                            label="Email Address" 
+                            component={ Input } 
+                        />
+                      </Grid>
+                      <Grid item xs={12}>
+                        <Field 
+                            type="password" 
+                            name="password" 
+                            label="Password" 
+                            component={ Input } 
+                        />
+                      </Grid>
+                    </Grid>
+
+                    
+                    <Button
+                      onClick={submitForm}
+                      fullWidth
+                      disabled={!isValid}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                     >
+                        Sign Up
+                     </Button>
+
+                  </Form>
+                )}
+               
+                </Formik>
+
+
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <CustomLink to="/auth/login">

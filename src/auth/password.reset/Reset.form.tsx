@@ -11,6 +11,13 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import CustomLink from '../../components/styled.components/link.styles';
+import { Field, Form, Formik } from "formik";
+import Input from "../../components/form/Input";
+import * as Yup from "yup";
+
+const ResetFormSchema = Yup.object().shape({
+  email: Yup.string().email('Email email address is required.').required('required')
+});
 
 function Copyright(props: any) {
   return (
@@ -56,25 +63,47 @@ export default function ResetPassword() {
           <Typography component="h1" variant="h5">
             Reset Password
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Send Reset Link
-            </Button>
+          <Box component="div" sx={{ mt: 1 }}>
+
+          <Formik
+                initialValues={{
+                  email: ''
+                }}
+
+                validationSchema={ResetFormSchema}
+
+                onSubmit={values => {
+                  // same shape as initial values
+                  console.log(values);
+                }}
+                >
+                  
+                {({ submitForm,isValid }) => (
+                  <Form>
+
+                    <Field 
+                       type="email" 
+                       name="email" 
+                       label="Email Address" 
+                       component={ Input } 
+                    />
+
+                    
+                    <Button
+                      onClick={submitForm}
+                      fullWidth
+                      disabled={!isValid}
+                      variant="contained"
+                      sx={{ mt: 3, mb: 2 }}
+                     >
+                        Send Reset Link
+                     </Button>
+
+                  </Form>
+                )}
+               
+                </Formik>
+
             <Grid container>
               <Grid item xs>
                 <CustomLink to="/signin">
