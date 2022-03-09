@@ -1,11 +1,11 @@
 import Card from "../../../components/card/Card";
 
-const ApplicationList = () => {
+const ApplicationView = () => {
     return (
         <Card>
-           <h1>All Applications</h1>
+           <h1>View Application</h1>
         </Card>
     );
 }
 
-export default ApplicationList;
+export default ApplicationView;

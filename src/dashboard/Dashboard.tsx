@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { styled, createTheme, ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
-
 import Box from '@mui/material/Box';
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
@@ -9,19 +8,20 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import Badge from '@mui/material/Badge';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
-import Paper from '@mui/material/Paper';
 import Link from '@mui/material/Link';
-import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
-import NotificationsIcon from '@mui/icons-material/Notifications';
 import { Drawer, drawerWidth } from './component.style';
 import MenuItemBtn from '../components/menu/Menu.item.button';
-import DashboardIcon from '@mui/icons-material/Dashboard';
 import RoutesConfig from './Routes.config';
+import { Route, Switch, Redirect} from "react-router-dom";
+import CustomToolbar from "../components/toolbar/toolbar";
 
+import ApplicationList from './application/application.list/List.application';
+import ApplicationEdit from './application/application.edit/Edit.component';
+import ApplicationView from './application/application.view/Application.view';
+import Pricing from './pricing/Pricing';
+import Subscription from './subscription/Subscription';
 
 function Copyright(props: any) {
   return (
@@ -62,6 +62,7 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
+  
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -71,38 +72,7 @@ function DashboardContent() {
       <Box sx={{ display: 'flex' }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>
-          <Toolbar
-            sx={{
-              pr: '24px', // keep right padding when drawer closed
-            }}
-          >
-            <IconButton
-              edge="start"
-              color="inherit"
-              aria-label="open drawer"
-              onClick={toggleDrawer}
-              sx={{
-                marginRight: '36px',
-                ...(open && { display: 'none' }),
-              }}
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              Dashboard
-            </Typography>
-            <IconButton color="inherit">
-              <Badge badgeContent={4} color="secondary">
-                <NotificationsIcon />
-              </Badge>
-            </IconButton>
-          </Toolbar>
+          <CustomToolbar toggleDrawer={toggleDrawer} open={open} />
         </AppBar>
         <Drawer variant="permanent" open={open}>
           <Toolbar
@@ -122,7 +92,7 @@ function DashboardContent() {
           <List component="nav">
             {
               RoutesConfig.map(route => 
-                <MenuItemBtn primary={route.title} iconComponent={route.icon} />
+                <MenuItemBtn primary={route.title} iconComponent={route.icon} route={route.route} />
               )
             }
           </List>
@@ -141,23 +111,28 @@ function DashboardContent() {
         >
           <Toolbar />
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
-              {/* Chart */}
-              <Grid item xs={12} md={12} lg={12}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: 'flex',
-                    flexDirection: 'column',
-                    height: 240,
-                  }}
-                >
-                  <h3>Dashboards here...</h3>
-                </Paper>
-              </Grid>
-            </Grid>
-            <Copyright sx={{ pt: 4 }} />
+            <Switch>
+              <Route path="/dashboard/application-list">
+                <ApplicationList />
+              </Route>
+              <Route path="/dashboard/application-edit">
+                <ApplicationEdit />
+              </Route>
+              <Route path="/dashboard/application-view">
+                <ApplicationView />
+              </Route>
+              <Route path="/dashboard/pricing">
+                <Pricing />
+              </Route>
+              <Route path="/dashboard/subscription">
+                <Subscription />
+              </Route>
+
+              <Redirect from="*" to="/dashboard/application-list" />
+            </Switch>
           </Container>
+          <Copyright sx={{ pt: 4 }} />
+
         </Box>
       </Box>
     </ThemeProvider>

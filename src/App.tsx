@@ -1,9 +1,7 @@
 import React from "react";
-import { BrowserRouter as Router, Route, Switch,Redirect} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, Redirect} from "react-router-dom";
 import AuthRoute from "./auth/auth.route";
-
 import Dashboard from "./dashboard/Dashboard";
-
 
 function App() {
 
@@ -13,7 +11,7 @@ function App() {
     <Router>
       <div className="app">
         <Switch>
-          <Route  path="/auth">
+          <Route path="/auth">
             <AuthRoute />
           </Route>
           <Route path="/dashboard">

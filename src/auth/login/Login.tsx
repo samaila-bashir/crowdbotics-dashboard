@@ -10,6 +10,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CustomLink from '../../components/styled.components/link.styles';
 
 function Copyright(props: any) {
   return (
@@ -86,14 +87,14 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link href="/auth/reset-password" variant="body2">
+                <CustomLink to="/auth/reset-password">
                   Forgot password?
-                </Link>
+                </CustomLink>
               </Grid>
               <Grid item>
-                <Link href="/auth/signup" variant="body2">
+                <CustomLink to="/auth/signup">
                   {"Don't have an account? Sign Up"}
-                </Link>
+                </CustomLink>
               </Grid>
             </Grid>
           </Box>
