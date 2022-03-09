@@ -15,19 +15,17 @@ function App() {
   return (
     <Provider store={store}>
       <PersistGate persistor={persistor}>
-      <Router>
-        <div className="app">
-          <Switch>
-            <Route path="/auth">
-              <AuthRoute />
-            </Route>
-            <Route path="/dashboard">
-              <Dashboard />
-            </Route>
-            <Redirect from="*" to="/dashboard"/>
-          </Switch>
-        </div>
-      </Router>
+        <Router>
+            <Switch>
+              <Route path="/auth">
+                <AuthRoute />
+              </Route>
+              <Route path="/dashboard">
+                <Dashboard />
+              </Route>
+              <Redirect from="*" to="/dashboard"/>
+            </Switch>
+        </Router>
       </PersistGate>
     </Provider>
   );
