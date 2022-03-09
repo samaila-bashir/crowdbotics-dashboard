@@ -10,7 +10,6 @@ const Card = (props: any) => {
                 p: 2,
                 display: 'flex',
                 flexDirection: 'column',
-                height: 240,
                 }}
             >
                 { props.children }

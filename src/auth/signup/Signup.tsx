@@ -71,7 +71,10 @@ export default function SignUp() {
 
           <Formik
                 initialValues={{
-                  email: ''
+                  firstName: '',
+                  lastName: '',
+                  email: '',
+                  password: ''
                 }}
 
                 validationSchema={SignupFormSchema}

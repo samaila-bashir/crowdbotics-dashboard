@@ -24,7 +24,7 @@ function App() {
             <Route path="/dashboard">
               <Dashboard />
             </Route>
-            <Redirect from="*" to="/auth"/>
+            <Redirect from="*" to="/dashboard"/>
           </Switch>
         </div>
       </Router>
