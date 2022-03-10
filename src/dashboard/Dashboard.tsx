@@ -89,8 +89,8 @@ function DashboardContent() {
           <Divider />
           <List component="nav">
             {
-              RoutesConfig.map(route => 
-                <MenuItemBtn primary={route.title} iconComponent={route.icon} route={route.route} />
+              RoutesConfig.map((route, index) => 
+                <MenuItemBtn key={index.toString()} primary={route.title} iconComponent={route.icon} route={route.route} />
               )
             }
           </List>

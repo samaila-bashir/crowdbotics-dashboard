@@ -1,11 +1,18 @@
 import axios from "axios";
 import { ApplicationTypes, AppsRequestObject, AppResponseObject } from "../types/entities";
+import { RequestResponse } from "../types/request.response";
 
-const createApplication = async (application: AppsRequestObject) => {
-    
+const getApplications = async () : Promise<RequestResponse<AppResponseObject>> => {    
+    try {
+        const response = await axios.get('/api/v1/apps/');
+        return { success: true, payload: response.data.payload }
+    } catch(e) {
+        const {message} = e as any;
+        return { success: false, payload: message as string }
+    }
 }
 
-const getApplications = async () => {
+const createApplication = async (application: AppsRequestObject) => {
 
 }
 
