@@ -23,7 +23,7 @@ function App() {
               <Route path="/dashboard">
                 <Dashboard />
               </Route>
-              <Redirect from="*" to="/dashboard"/>
+              <Redirect from="*" to="/auth"/>
             </Switch>
         </Router>
       </PersistGate>

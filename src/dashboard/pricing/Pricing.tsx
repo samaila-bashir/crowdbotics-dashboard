@@ -1,10 +1,8 @@
-import Card from "../../components/card/Card";
+import PricingContent from "../../components/pricing/PricingContent";
 
 const Pricing = () => {
     return (
-        <Card>
-           <h1>Pricing</h1>
-        </Card>
+        <PricingContent />
     );
 }
 

@@ -6,6 +6,10 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
+import ViewIcon from '@mui/icons-material/Visibility';
 
 interface Props {
     tableHeads: string[];
@@ -25,6 +29,9 @@ export default function BasicTable(props: Props) {
             {
                 tableHeads.map((tableHead, index) => <TableCell key={index.toString()}>{ tableHead }</TableCell>)
             }
+            <TableCell style={{ textAlign: "center" }}>
+              Actions
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>      
@@ -37,6 +44,20 @@ export default function BasicTable(props: Props) {
                                 {rows[key]}
                             </TableCell>)
                         }
+
+                        <TableCell>
+                          <IconButton>
+                            <ViewIcon />
+                          </IconButton>
+
+                          <IconButton>
+                            <EditIcon />
+                          </IconButton>
+
+                          <IconButton>
+                              <DeleteIcon />
+                          </IconButton>
+                        </TableCell>
                     </TableRow>
 
                 )

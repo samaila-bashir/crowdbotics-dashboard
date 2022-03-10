@@ -1,5 +1,5 @@
 import Card from "../../../components/card/Card";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import ActionsAPI from "../../../api/Application.api";
 import { useEffect, useState } from "react";
 import { AppResponseObject } from "../../../types/entities";
@@ -13,7 +13,6 @@ const ApplicationList = () => {
 
     const getApplications = async () => {
         const {success, payload} = await ActionsAPI.getApplications();
-        console.log(payload);
         if (success) {
             setApplications(payload as AppResponseObject[]);
         } else {
@@ -31,9 +30,7 @@ const ApplicationList = () => {
     return (
         <Card>
            <h1>All Applications</h1>
-           {/* <Link to="/dashboard/application/edit">
-                 
-           </Link> */}
+
            <div style={{display: "flex", justifyContent: "flex-end", marginBottom: 20}}>
                 <Button onClick={() => history.push("/dashboard/application/edit")} title="New Application" variant="contained" />
            </div>

@@ -14,6 +14,8 @@ import CustomLink from '../../components/styled.components/link.styles';
 import { Field, Form, Formik } from "formik";
 import Input from "../../components/form/Input";
 import * as Yup from "yup";
+import { LoginRequestObject } from '../../types/auth';
+import AuthAPI from '../../api/auth';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Email email address is required.').required('required'),
@@ -36,14 +38,9 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+  const handleSubmit = async (authCredentials: LoginRequestObject) => {
+    await AuthAPI.login(authCredentials);
   };
 
   return (
@@ -76,7 +73,7 @@ export default function SignIn() {
 
                 onSubmit={values => {
                   // same shape as initial values
-                  console.log(values);
+                  handleSubmit(values);
                 }}
                 >
                   

@@ -6,7 +6,7 @@ import axios from "axios";
 import mockSetup from "./__mocks__/mock.setup";
 
 axios.defaults.baseURL = "https://hiring-example-25770.botics.co";
-mockSetup(axios);
+// mockSetup(axios);
 
 ReactDOM.render(
   <React.StrictMode>
