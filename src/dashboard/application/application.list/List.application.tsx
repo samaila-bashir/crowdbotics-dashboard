@@ -1,13 +1,15 @@
 import Card from "../../../components/card/Card";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import ActionsAPI from "../../../api/Application.api";
 import { useEffect, useState } from "react";
 import { AppResponseObject } from "../../../types/entities";
 import BasicTable from "../../../components/table/Table";
+import Button from "../../../components/button/Button";
 
 const ApplicationList = () => {
 
     const [applications, setApplications] = useState([] as AppResponseObject[]);
+    const history = useHistory();
 
     const getApplications = async () => {
         const {success, payload} = await ActionsAPI.getApplications();
@@ -29,7 +31,13 @@ const ApplicationList = () => {
     return (
         <Card>
            <h1>All Applications</h1>
-           <Link to="/dashboard/application/edit">Add Application</Link>
+           {/* <Link to="/dashboard/application/edit">
+                 
+           </Link> */}
+           <div style={{display: "flex", justifyContent: "flex-end", marginBottom: 20}}>
+                <Button onClick={() => history.push("/dashboard/application/edit")} title="New Application" variant="contained" />
+           </div>
+
            <BasicTable tableHeads={applicationDataTitles} dataKeys={applicationDataKeys} data={applications} />
         </Card>
     );
