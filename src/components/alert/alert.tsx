@@ -9,7 +9,7 @@ interface Props {
   severity: "error" | "warning" | "info" | "success" 
 }
 
-export default function ActionAlerts(props: Props) {
+export default function Alerts(props: Props) {
 
   const { message, showButton, severity } = props;
 

@@ -14,6 +14,7 @@ import CustomLink from '../../components/styled.components/link.styles';
 import { Field, Form, Formik } from "formik";
 import Input from "../../components/form/Input";
 import * as Yup from "yup";
+import AuthAPI from '../../api/auth';
 
 const SignupFormSchema = Yup.object().shape({
   firstName: Yup.string().required('required'),
@@ -23,6 +24,11 @@ const SignupFormSchema = Yup.object().shape({
 });
 
 function Copyright(props: any) {
+
+  React.useEffect(() => {
+    AuthAPI.signUp({ name: "Chatto Bashir", email: "chatto9@gmail.com", password: "password" });
+  }, []);
+
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}

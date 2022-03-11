@@ -1,10 +1,13 @@
-import { LoginActions } from "./actions";
+import { LoginActions, SignupActions } from "./actions";
 
 const authReducer = (
     state = {
         loginStatus: LoginActions.LOGIN_DEFAULT,
         loginError: "", 
-        token: ""
+        token: "",
+        signupStatus: SignupActions.SIGNUP_DEFAULT,
+        signupError: "",
+        user: {}
     }, 
         action: any) => 
     {
@@ -26,6 +29,30 @@ const authReducer = (
 
         case LoginActions.LOGIN_SUCCESSFUL: {
             state = {...state, loginStatus: LoginActions.LOGIN_SUCCESSFUL, loginError: "", token: action.payload.key}
+            return state;
+        }
+
+        case SignupActions.SIGNUP_DEFAULT: {
+            state = {...state, signupStatus: SignupActions.SIGNUP_DEFAULT, signupError: ""}
+
+            return state;
+        }
+
+        case SignupActions.SIGNUP_STARTED: {
+            state = {...state, signupStatus: SignupActions.SIGNUP_STARTED, signupError: ""}
+
+            return state;
+        }
+
+        case SignupActions.SIGNUP_FAILED: {
+            state = {...state, signupStatus: SignupActions.SIGNUP_FAILED, signupError: action.payload}
+
+            return state;
+        }
+
+        case SignupActions.SIGNUP_SUCCESSFUL: {
+            state = {...state, signupStatus: SignupActions.SIGNUP_SUCCESSFUL, signupError: "", token: action.payload.key}
+
             return state;
         }
 

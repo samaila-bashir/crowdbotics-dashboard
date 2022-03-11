@@ -19,6 +19,7 @@ import AuthAPI from '../../api/auth';
 import { LoginActions } from "../actions";
 import { useSelector, useDispatch } from "react-redux";
 import Spinner from '../../components/spinner/Spinner';
+import Alerts from '../../components/alert/alert';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Email email address is required.').required('required'),
@@ -86,7 +87,7 @@ export default function SignIn() {
           </Typography>
           <Box component="div" sx={{ mt: 1 }}>
 
-            { loginError && <h3>{loginError}</h3> }
+            { loginError && <Alerts message={loginError} severity="error" /> }
 
           <Formik
                 initialValues={{
