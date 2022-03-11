@@ -15,6 +15,8 @@ export default () => {
   let store = createStore(persistedReducer);
   let persistor = persistStore(store);
 
+  // persistor.purge();
+
   return { store, persistor };
 };
 

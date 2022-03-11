@@ -9,6 +9,11 @@ const authReducer = (
         action: any) => 
     {
     switch (action.type) {
+        case LoginActions.LOGIN_DEFAULT: {
+            state = {...state, loginStatus: LoginActions.LOGIN_DEFAULT, loginError: ""}
+            return state;
+        }
+
         case LoginActions.LOGIN_STARTED: {
             state = {...state, loginStatus: LoginActions.LOGIN_STARTED, loginError: ""}
             return state;
@@ -23,6 +28,9 @@ const authReducer = (
             state = {...state, loginStatus: LoginActions.LOGIN_SUCCESSFUL, loginError: "", token: action.payload.key}
             return state;
         }
+
+        default: 
+            return state;
     }
 }
 

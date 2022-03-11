@@ -16,6 +16,9 @@ import Input from "../../components/form/Input";
 import * as Yup from "yup";
 import { LoginRequestObject } from '../../types/auth';
 import AuthAPI from '../../api/auth';
+import { LoginActions } from "../actions";
+import { useSelector, useDispatch } from "react-redux";
+import Spinner from '../../components/spinner/Spinner';
 
 const LoginSchema = Yup.object().shape({
   email: Yup.string().email('Email email address is required.').required('required'),
@@ -39,9 +42,29 @@ const theme = createTheme();
 
 export default function SignIn() {
 
+  React.useEffect(() => {
+    dispatch({ type: LoginActions.LOGIN_DEFAULT });
+  }, []);
+
+  const { loginStatus, loginError } = useSelector((store: any) => ({
+    loginStatus: store.auth.loginStatus,
+    loginError: store.auth.loginError
+  }));
+
+  const dispatch = useDispatch();
+
   const handleSubmit = async (authCredentials: LoginRequestObject) => {
-    await AuthAPI.login(authCredentials);
+    dispatch({type: LoginActions.LOGIN_STARTED})
+    const { success, payload } = await AuthAPI.login(authCredentials);
+
+    if (success) {
+      dispatch({ type: LoginActions.LOGIN_SUCCESSFUL, payload: payload });
+    } else {
+      dispatch({ type: LoginActions.LOGIN_FAILED, payload: payload });
+    }
   };
+
+  const isLoading = LoginActions.LOGIN_STARTED === loginStatus;
 
   return (
     <ThemeProvider theme={theme}>
@@ -62,6 +85,8 @@ export default function SignIn() {
             Sign in
           </Typography>
           <Box component="div" sx={{ mt: 1 }}>
+
+            { loginError && <h3>{loginError}</h3> }
 
           <Formik
                 initialValues={{
@@ -102,7 +127,7 @@ export default function SignIn() {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                      >
-                        Sign In
+                        Sign In { isLoading && <Spinner color="inherit" size={25} /> }
                      </Button>
 
                   </Form>
