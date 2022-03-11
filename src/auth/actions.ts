@@ -7,7 +7,9 @@ export enum LoginActions {
 
 export enum SignupActions {
     SIGNUP_DEFAULT = "SIGNUP_DEFAULT",
-    SIGNUP_STARTED = "SIGNUP_DEFAULT",
+    SIGNUP_STARTED = "SIGNUP_STARTED",
     SIGNUP_FAILED = "SIGNUP_FAILED",
     SIGNUP_SUCCESSFUL = "SIGNUP_SUCCESSFUL"
 }
+
+export const LogoutAction = "LOGOUT"; 

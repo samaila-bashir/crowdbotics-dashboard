@@ -1,14 +1,16 @@
-import { LoginActions, SignupActions } from "./actions";
+import { LoginActions, SignupActions, LogoutAction } from "./actions";
+
+const initialState = {
+    loginStatus: LoginActions.LOGIN_DEFAULT,
+    loginError: "", 
+    token: "",
+    signupStatus: SignupActions.SIGNUP_DEFAULT,
+    signupError: "",
+    user: {}
+};
 
 const authReducer = (
-    state = {
-        loginStatus: LoginActions.LOGIN_DEFAULT,
-        loginError: "", 
-        token: "",
-        signupStatus: SignupActions.SIGNUP_DEFAULT,
-        signupError: "",
-        user: {}
-    }, 
+    state = {...initialState}, 
         action: any) => 
     {
     switch (action.type) {
@@ -52,6 +54,12 @@ const authReducer = (
 
         case SignupActions.SIGNUP_SUCCESSFUL: {
             state = {...state, signupStatus: SignupActions.SIGNUP_SUCCESSFUL, signupError: "", token: action.payload.key}
+
+            return state;
+        }
+
+        case LogoutAction: {
+            state = {...initialState};
 
             return state;
         }

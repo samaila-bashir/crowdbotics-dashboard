@@ -15,19 +15,18 @@ import { Field, Form, Formik } from "formik";
 import Input from "../../components/form/Input";
 import * as Yup from "yup";
 import AuthAPI from '../../api/auth';
+import { SignupActions } from '../actions';
+import { SignupRequestObject } from '../../types/auth';
+import { useDispatch, useSelector } from 'react-redux';
+import Spinner from '../../components/spinner/Spinner';
+import Alerts from '../../components/alert/alert';
 
 const SignupFormSchema = Yup.object().shape({
-  firstName: Yup.string().required('required'),
-  lastName: Yup.string().required('required'),
   email: Yup.string().email('Email email address is required.').required('required'),
   password: Yup.string().required('required')
 });
 
 function Copyright(props: any) {
-
-  React.useEffect(() => {
-    AuthAPI.signUp({ name: "Chatto Bashir", email: "chatto9@gmail.com", password: "password" });
-  }, []);
 
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
@@ -44,15 +43,29 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignUp() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+  
+  const {signupError, signupStatus} = useSelector((store: any) => (
+    {
+      signupError: store.auth.signupError,
+      signupStatus: store.auth.signupStatus
+    }    
+  ));
+
+  const dispatch = useDispatch();
+
+  const isLoading = SignupActions.SIGNUP_STARTED === signupStatus;
+
+  const handleSubmit = async (authCredentials: SignupRequestObject) => {
+    dispatch({type: SignupActions.SIGNUP_STARTED})
+    const { success, payload } = await AuthAPI.signUp(authCredentials);
+
+    if (success) {
+      dispatch({ type: SignupActions.SIGNUP_SUCCESSFUL, payload: payload });
+    } else {
+      dispatch({ type: SignupActions.SIGNUP_FAILED, payload: payload });
+    }
   };
+
 
   return (
     <ThemeProvider theme={theme}>
@@ -74,11 +87,10 @@ export default function SignUp() {
           </Typography>
           <Box component="div" sx={{ mt: 3 }}>
 
+          { signupError && <Alerts message={signupError} severity="error" /> }
 
           <Formik
                 initialValues={{
-                  firstName: '',
-                  lastName: '',
                   email: '',
                   password: ''
                 }}
@@ -86,8 +98,7 @@ export default function SignUp() {
                 validationSchema={SignupFormSchema}
 
                 onSubmit={values => {
-                  // same shape as initial values
-                  console.log(values);
+                  handleSubmit(values);
                 }}
                 >
                   
@@ -95,22 +106,6 @@ export default function SignUp() {
                   <Form>                    
 
                     <Grid container spacing={2}>
-                      <Grid item xs={12} sm={6}>
-                          <Field 
-                              type="text" 
-                              name="firstName" 
-                              label="First Name" 
-                              component={ Input } 
-                          />
-                      </Grid>
-                      <Grid item xs={12} sm={6}>
-                        <Field 
-                            type="text" 
-                            name="lastName" 
-                            label="Last Name" 
-                            component={ Input } 
-                        />
-                      </Grid>
                       <Grid item xs={12}>
                         <Field 
                             type="email" 
@@ -137,7 +132,7 @@ export default function SignUp() {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                      >
-                        Sign Up
+                        Sign Up { isLoading && <Spinner color="inherit" size={25} /> }
                      </Button>
 
                   </Form>

@@ -16,7 +16,8 @@ import MenuItemBtn from '../components/menu/Menu.item.button';
 import RoutesConfig from './Routes.config';
 import { Route, Switch, Redirect} from "react-router-dom";
 import CustomToolbar from "../components/toolbar/toolbar";
-
+import { useDispatch } from 'react-redux';
+import { LogoutAction } from '../auth/actions';
 import ApplicationRoute from './application/application.route';
 import Pricing from './pricing/Pricing';
 import Subscription from './subscription/Subscription';
@@ -60,10 +61,17 @@ const mdTheme = createTheme();
 
 function DashboardContent() {
   const [open, setOpen] = React.useState(true);
-  
+  const dispatch = useDispatch();
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
+
+  const handleLogout = () => {
+    dispatch({
+      type: LogoutAction
+    });
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
@@ -89,8 +97,17 @@ function DashboardContent() {
           <Divider />
           <List component="nav">
             {
-              RoutesConfig.map((route, index) => 
-                <MenuItemBtn key={index.toString()} primary={route.title} iconComponent={route.icon} route={route.route} />
+              RoutesConfig.map((route, index) =>
+
+                <MenuItemBtn 
+                  onClick={ 
+                      route.title === "Logout" ? handleLogout : () => "" 
+                    } 
+                    key={index.toString()} 
+                    primary={route.title} 
+                    iconComponent={route.icon} 
+                    route={route.route} 
+                />
               )
             }
           </List>
