@@ -13,6 +13,19 @@ const { store, persistor } = ReduxConfig();
 axios.defaults.baseURL = "https://hiring-example-25770.botics.co";
 // mockSetup(axios);
 
+axios.interceptors.request.use((config)=>{
+  const token = store.getState().auth.token;
+  console.log(token)
+  // @ts-ignore
+  // config.headers["X-CSRFToken"] = `${token}`; // this is not working
+  if(token){
+    // @ts-ignore
+    config.headers["Authorization"] = `Token ${token}`; // this is not working
+  }
+    
+  return config;
+},(err)=> Promise.reject(err));
+
 ReactDOM.render(
   <React.StrictMode>
    <Provider store={store}>
