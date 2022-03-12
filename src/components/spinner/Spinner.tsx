@@ -12,7 +12,11 @@ export default function Spinner(props: Props) {
 
   return (
     <Box sx={{ display: 'flex' }}>
-      <CircularProgress style={{ marginLeft: 10 }} color={color} size={size} />
+      <CircularProgress 
+          style={{ marginLeft: 10 }} 
+          color={color} 
+          size={size} 
+      />
     </Box>
   );
 }
