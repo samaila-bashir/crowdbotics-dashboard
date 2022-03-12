@@ -26,7 +26,9 @@ const applicationReducer = (state = {...initialState}, action: any) => {
         }
 
         case GetApplicationActions.GETAPPLICATION_SUCCESSFUL: {
-            state = { ...state, applicationStatus: GetApplicationActions.GETAPPLICATION_SUCCESSFUL, applicationError: "", applications: action.payload }
+            const applications = action.payload.sort((a:any,b:any)=> a.name.toLowerCase() > b.name.toLowerCase());
+            
+            state = { ...state, applicationStatus: GetApplicationActions.GETAPPLICATION_SUCCESSFUL, applicationError: "", applications }
 
             return state; 
         }

@@ -7,10 +7,11 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { AppsRequestObject } from "../../../types/entities";
 import { useDispatch, useSelector } from "react-redux";
-import { AddApplicationActions } from "../actions";
+import { AddApplicationActions, UpdateApplicationActions } from "../actions";
 import ApplicationActionsAPI from "../../../api/Application.api";
 import Spinner from "../../../components/spinner/Spinner";
-import { useHistory } from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 const ApplicationFormSchema = Yup.object().shape({
   name: Yup.string().required('required'),
@@ -22,11 +23,31 @@ const ApplicationFormSchema = Yup.object().shape({
 
 const ApplicationEdit = () => {
 
+  const [initialState, setInitialState] = useState({
+    name: '',
+    description: '',
+    type: '',
+    framework: '',
+    domain_name: ''
+  });
+
   const dispatch = useDispatch();
   const history = useHistory();
+  const location = useLocation();
 
-  const { addApplicationStatus } = useSelector((store: any) => ({
-    addApplicationStatus: store.application.addApplicationStatus
+  const editData = location.state;
+
+  useEffect(() => {
+    if (editData) {
+      const { id, name, description, type, framework, domain_name } = editData as any;
+
+      setInitialState({ id, name, description, type, framework, domain_name } as any);
+    }
+  }, []);
+
+  const { addApplicationStatus, updateApplicationStatus } = useSelector((store: any) => ({
+    addApplicationStatus: store.application.addApplicationStatus,
+    updateApplicationStatus: store.application.updateApplicationStatus
   }));
 
   const handleSubmit = async (application: AppsRequestObject) => {
@@ -42,25 +63,44 @@ const ApplicationEdit = () => {
     }
   };
 
-  const isLoading = addApplicationStatus === AddApplicationActions.ADDAPPLICATION_STARTED; 
+  const handleUpdate = async (application: AppsRequestObject, id: number) => {
+    dispatch({type: UpdateApplicationActions.UPDATEAPPLICATION_STARTED
+    });
+
+    const { success, payload } = await ApplicationActionsAPI.updateApplication(application, id);
+
+    if (success) {
+      dispatch({type: UpdateApplicationActions.UPDATEAPPLICATION_SUCCESSFUL
+      });
+
+      history.goBack();
+    } else {
+      dispatch({type: UpdateApplicationActions.UPDATEAPPLICATION_FAILED, payload: payload
+      });
+    }
+  } 
+
+  const isLoading = addApplicationStatus === AddApplicationActions.ADDAPPLICATION_STARTED || updateApplicationStatus === UpdateApplicationActions.UPDATEAPPLICATION_STARTED; 
 
     return (
         <Card>
 
             <Formik
-                initialValues={{
-                  name: '',
-                  description: '',
-                  type: '',
-                  framework: '',
-                  domain_name: ''
-                }}
+                initialValues={initialState}
+
+                enableReinitialize
 
                 validationSchema={ApplicationFormSchema}
 
-                onSubmit={values => {
+                onSubmit={(values: any) => {
                   // same shape as initial values
-                  handleSubmit(values as any);
+                  if (!editData) {
+                    handleSubmit(values as any);
+                  } else {
+                    const { name, type, description, framework, domain_name } = values;
+
+                    handleUpdate({ name, type, description, framework, domain_name } as any, values.id);
+                  }
                 }}
                 >
                   
@@ -144,7 +184,7 @@ const ApplicationEdit = () => {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                      >
-                        Create Application { isLoading && <Spinner color="inherit" size={25} /> }
+                        {!editData ? 'Create' : 'Update'} Application { isLoading && <Spinner color="inherit" size={25} /> }
                      </Button>
 
                   </Form>

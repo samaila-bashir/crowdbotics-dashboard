@@ -8,10 +8,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { DeleteApplicationActions, GetApplicationActions } from "../actions";
 import BasicModal from "../../../components/modal/modal";
 import Spinner from "../../../components/spinner/Spinner";
+import Alerts from "../../../components/alert/alert";
 
 const ApplicationList = () => {
     const [open, setOpen] = useState(false);
     const [application, setApplication] = useState({} as any);
+
+    const history = useHistory();
 
     const dispatch = useDispatch();
 
@@ -24,8 +27,6 @@ const ApplicationList = () => {
     const emptyApplication = applications.length === 0 && applicationStatus === GetApplicationActions.GETAPPLICATION_SUCCESSFUL;
 
     const applicationLoader = GetApplicationActions.GETAPPLICATION_STARTED === applicationStatus;
-
-    const history = useHistory();
 
     const getApplications = async () => {
         dispatch({
@@ -59,8 +60,10 @@ const ApplicationList = () => {
     }
 
     const handleEditApplication = (data: any) => {
-        // const response = ActionsAPI.updateApplication(data, data.id);
-        console.log("Edit application:", data);
+        history.push({
+            pathname: "/dashboard/application/edit",
+            state: data
+        });
     }
 
     const handleDeleteApplication = async (data: any) => {
@@ -122,7 +125,7 @@ const ApplicationList = () => {
                 />
            }
 
-           { emptyApplication && 'No applications found.' }
+           { emptyApplication && <Alerts message="No application added." severity="info" /> }
         </Card>
     );
 }
