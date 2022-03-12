@@ -2,13 +2,16 @@ import Card from "../../../components/card/Card";
 import { useHistory } from "react-router-dom";
 import ActionsAPI from "../../../api/Application.api";
 import { useEffect, useState } from "react";
-import { AppResponseObject } from "../../../types/entities";
 import BasicTable from "../../../components/table/Table";
 import Button from "../../../components/button/Button";
 import { useDispatch, useSelector } from "react-redux";
 import { GetApplicationActions } from "../actions";
+import BasicModal from "../../../components/modal/modal";
 
 const ApplicationList = () => {
+    const [open, setOpen] = useState(false);
+    const [application, setApplication] = useState({} as any);
+
     const dispatch = useDispatch();
 
     const { applications, applicationStatus } = useSelector((store: any) => ({
@@ -48,8 +51,21 @@ const ApplicationList = () => {
         getApplications();
     }, []);
 
+    const handleViewApplication = (data: any) => {
+        setApplication(data);
+        setOpen(true);
+    }
+
     return (
         <Card>
+            <BasicModal open={open} onClose={() => setOpen(false)}>
+                <h2>Application Info:</h2>
+                <p><strong>Name:</strong> { application.name }</p>
+                <p><strong>Framework:</strong> { application.framework }</p>
+                <p><strong>Type:</strong> { application.type }</p>
+                <p><strong>Domain Name:</strong> { application.domain_name }</p>
+            </BasicModal>
+
            <h1>All Applications {applicationLoader && 'Loading...'}</h1>
 
            <div style={{display: "flex", justifyContent: "flex-end", marginBottom: 20}}>
@@ -57,7 +73,13 @@ const ApplicationList = () => {
            </div>
 
            {
-               !emptyApplication && <BasicTable tableHeads={applicationDataTitles} dataKeys={applicationDataKeys} data={applications} />
+               !emptyApplication && 
+               <BasicTable 
+                    tableHeads={applicationDataTitles} 
+                    dataKeys={applicationDataKeys} 
+                    data={applications} 
+                    onView={handleViewApplication}
+                />
            }
 
            { emptyApplication && 'No applications found.' }

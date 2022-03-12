@@ -10,7 +10,6 @@ interface LoginPayload {
 const login = async (authCredentials: LoginRequestObject) : Promise<RequestResponse<LoginPayload>> => {
     try {
         const response = await axios.post("/rest-auth/login/", authCredentials);
-        console.log(response)
         return {success: true, payload: response.data};
     } catch(e) {
         const error = e as any;

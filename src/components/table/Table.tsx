@@ -15,11 +15,14 @@ interface Props {
     tableHeads: string[];
     dataKeys: string[];
     data: any[];
+    onView?: (data: any) => void;
+    onDelete?: (data: any) => void;
+    onEdit?: (data: any) => void;
 };
 
 export default function BasicTable(props: Props) {
 
-    const {tableHeads, dataKeys, data} = props; 
+    const {tableHeads, dataKeys, data, onView, onDelete, onEdit} = props; 
 
   return (
     <TableContainer component={Paper}>
@@ -46,15 +49,15 @@ export default function BasicTable(props: Props) {
                         }
 
                         <TableCell>
-                          <IconButton>
+                          <IconButton onClick={() => onView && onView(rows)}>
                             <ViewIcon />
                           </IconButton>
 
-                          <IconButton>
+                          <IconButton onClick={() => onEdit && onEdit(rows)}>
                             <EditIcon />
                           </IconButton>
 
-                          <IconButton>
+                          <IconButton onClick={() => onDelete && onDelete(rows)}>
                               <DeleteIcon />
                           </IconButton>
                         </TableCell>

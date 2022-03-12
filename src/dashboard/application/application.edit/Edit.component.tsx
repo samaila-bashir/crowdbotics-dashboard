@@ -6,9 +6,11 @@ import * as Yup from "yup";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { AppsRequestObject } from "../../../types/entities";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { AddApplicationActions } from "../actions";
 import ApplicationActionsAPI from "../../../api/Application.api";
+import Spinner from "../../../components/spinner/Spinner";
+import { useHistory } from "react-router-dom";
 
 const ApplicationFormSchema = Yup.object().shape({
   name: Yup.string().required('required'),
@@ -21,6 +23,11 @@ const ApplicationFormSchema = Yup.object().shape({
 const ApplicationEdit = () => {
 
   const dispatch = useDispatch();
+  const history = useHistory();
+
+  const { addApplicationStatus } = useSelector((store: any) => ({
+    addApplicationStatus: store.application.addApplicationStatus
+  }));
 
   const handleSubmit = async (application: AppsRequestObject) => {
     dispatch({type: AddApplicationActions.ADDAPPLICATION_STARTED})
@@ -28,10 +35,14 @@ const ApplicationEdit = () => {
 
     if (success) {
       dispatch({ type: AddApplicationActions.ADDAPPLICATION_SUCCESSFUL, payload: payload });
+
+      history.goBack();
     } else {
       dispatch({ type: AddApplicationActions.ADDAPPLICATION_FAILED, payload: payload });
     }
   };
+
+  const isLoading = addApplicationStatus === AddApplicationActions.ADDAPPLICATION_STARTED; 
 
     return (
         <Card>
@@ -133,7 +144,7 @@ const ApplicationEdit = () => {
                       variant="contained"
                       sx={{ mt: 3, mb: 2 }}
                      >
-                        Create Application
+                        Create Application { isLoading && <Spinner color="inherit" size={25} /> }
                      </Button>
 
                   </Form>
