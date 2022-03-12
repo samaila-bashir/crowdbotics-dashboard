@@ -14,17 +14,16 @@ export default function Select({field,form,...props}) {
           { props.title }
         </InputLabel>
         <NativeSelect
-          defaultValue={30}
           {...field}
         >
             <option value="Null">Please Select</option>
-          {
-              props.options.map((item:any)=>
-                 <option value={item.value}>
-                   {item.title}
-                 </option>
-                )
-          }
+            {
+                props.options.map((item:any, index: number)=>
+                  <option key={index.toString()} value={item.value}>
+                    {item.title}
+                  </option>
+                  )
+            }
           
         </NativeSelect>
       </FormControl>

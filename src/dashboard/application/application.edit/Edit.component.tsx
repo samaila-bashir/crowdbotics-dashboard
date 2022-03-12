@@ -2,11 +2,13 @@ import Card from "../../../components/card/Card";
 import { Field, Form, Formik } from "formik";
 import Input from "../../../components/form/Input";
 import Select from '../../../components/form/Select';
-
 import * as Yup from "yup";
 import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
+import { AppsRequestObject } from "../../../types/entities";
+import { useDispatch } from "react-redux";
+import { AddApplicationActions } from "../actions";
+import ApplicationActionsAPI from "../../../api/Application.api";
 
 const ApplicationFormSchema = Yup.object().shape({
   name: Yup.string().required('required'),
@@ -17,6 +19,20 @@ const ApplicationFormSchema = Yup.object().shape({
 });
 
 const ApplicationEdit = () => {
+
+  const dispatch = useDispatch();
+
+  const handleSubmit = async (application: AppsRequestObject) => {
+    dispatch({type: AddApplicationActions.ADDAPPLICATION_STARTED})
+    const { success, payload } = await ApplicationActionsAPI.createApplication(application);
+
+    if (success) {
+      dispatch({ type: AddApplicationActions.ADDAPPLICATION_SUCCESSFUL, payload: payload });
+    } else {
+      dispatch({ type: AddApplicationActions.ADDAPPLICATION_FAILED, payload: payload });
+    }
+  };
+
     return (
         <Card>
 
@@ -33,7 +49,7 @@ const ApplicationEdit = () => {
 
                 onSubmit={values => {
                   // same shape as initial values
-                  console.log(values);
+                  handleSubmit(values as any);
                 }}
                 >
                   
@@ -124,42 +140,6 @@ const ApplicationEdit = () => {
                 )}
                
                 </Formik>
-
-
-
-                
-                {/* <Grid item xs={12} md={6}>
-                <TextField
-                    required
-                    id="cardNumber"
-                    label="Card number"
-                    fullWidth
-                    autoComplete="cc-number"
-                    variant="standard"
-                />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                <TextField
-                    required
-                    id="expDate"
-                    label="Expiry date"
-                    fullWidth
-                    autoComplete="cc-exp"
-                    variant="standard"
-                />
-                </Grid>
-                <Grid item xs={12} md={6}>
-                <TextField
-                    required
-                    id="cvv"
-                    label="CVV"
-                    helperText="Last three digits on signature strip"
-                    fullWidth
-                    autoComplete="cc-csc"
-                    variant="standard"
-                />
-                </Grid> */}
-
 
         </Card>
     );

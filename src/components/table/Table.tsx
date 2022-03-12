@@ -37,10 +37,10 @@ export default function BasicTable(props: Props) {
         <TableBody>      
             {
                 data.map((rows:any, index) => 
-                      <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                      <TableRow key={index.toString()} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                         >     
                         {
-                            dataKeys.map((key)=> <TableCell>
+                            dataKeys.map((key, index) => <TableCell key={index.toString()}>
                                 {rows[key]}
                             </TableCell>)
                         }

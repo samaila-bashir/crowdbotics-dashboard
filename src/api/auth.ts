@@ -14,7 +14,9 @@ const login = async (authCredentials: LoginRequestObject) : Promise<RequestRespo
         return {success: true, payload: response.data};
     } catch(e) {
         const error = e as any;
+
         let message:string;
+        
         try{
             message = error.response.data.non_field_errors[0];
         }catch{

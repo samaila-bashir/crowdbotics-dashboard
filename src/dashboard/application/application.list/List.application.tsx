@@ -60,9 +60,7 @@ const ApplicationList = () => {
                !emptyApplication && <BasicTable tableHeads={applicationDataTitles} dataKeys={applicationDataKeys} data={applications} />
            }
 
-           {
-               emptyApplication && 'No applications found.'
-           }
+           { emptyApplication && 'No applications found.' }
         </Card>
     );
 }
