@@ -20,12 +20,22 @@ const createApplication = async (application: AppsRequestObject) => {
     }
 }
 
-const updateApplication = async () => {
-
+const updateApplication = async (application: AppsRequestObject, id: number) => {
+    try {
+        const response = await axios.put(`/api/v1/apps/${id}/`, application);
+        return { success: true, payload: response.data }
+    } catch {
+        return { success: false, payload: "Could not update application." }
+    }
 }
 
-const deleteApplication = async () => {
-
+const deleteApplication = async (id: number) => {
+    try {
+        const response = await axios.delete(`/api/v1/apps/${id}/`);
+        return { success: true, payload: response.data }
+    } catch {
+        return { success: false, payload: "Could not update application." }
+    }
 }
 
 const ApplicationActionsAPI = {
