@@ -1,5 +1,5 @@
 import axios from "axios";
-import { ApplicationTypes, AppsRequestObject, AppResponseObject } from "../types/entities";
+import { AppsRequestObject, AppResponseObject } from "../types/entities";
 import { RequestResponse } from "../types/request.response";
 
 const getApplications = async () : Promise<RequestResponse<AppResponseObject>> => {    
