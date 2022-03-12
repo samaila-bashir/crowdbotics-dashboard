@@ -5,8 +5,9 @@ import { useEffect, useState } from "react";
 import BasicTable from "../../../components/table/Table";
 import Button from "../../../components/button/Button";
 import { useDispatch, useSelector } from "react-redux";
-import { GetApplicationActions } from "../actions";
+import { DeleteApplicationActions, GetApplicationActions } from "../actions";
 import BasicModal from "../../../components/modal/modal";
+import Spinner from "../../../components/spinner/Spinner";
 
 const ApplicationList = () => {
     const [open, setOpen] = useState(false);
@@ -14,9 +15,10 @@ const ApplicationList = () => {
 
     const dispatch = useDispatch();
 
-    const { applications, applicationStatus } = useSelector((store: any) => ({
+    const { applications, applicationStatus, deleteApplicationStatus } = useSelector((store: any) => ({
         applications: store.application.applications,
-        applicationStatus: store.application.applicationStatus
+        applicationStatus: store.application.applicationStatus,
+        deleteApplicationStatus: store.application.deleteApplicationStatus
     }));
 
     const emptyApplication = applications.length === 0 && applicationStatus === GetApplicationActions.GETAPPLICATION_SUCCESSFUL;
@@ -56,6 +58,34 @@ const ApplicationList = () => {
         setOpen(true);
     }
 
+    const handleEditApplication = (data: any) => {
+        // const response = ActionsAPI.updateApplication(data, data.id);
+        console.log("Edit application:", data);
+    }
+
+    const handleDeleteApplication = async (data: any) => {
+        dispatch({
+            type: DeleteApplicationActions.DELETEAPPLICATION_STARTED
+        });
+
+        const { success, payload } = await ActionsAPI.deleteApplication(data.id);
+
+        if (success) {
+            dispatch({
+                type: DeleteApplicationActions.DELETEAPPLICATION_SUCCESSFUL,
+                payload: data.id 
+            });
+
+        } else {
+            dispatch({
+                type: DeleteApplicationActions.DELETEAPPLICATION_FAILED,
+                payload 
+            });
+        }
+    }
+
+    const deleteApplicationLoader = DeleteApplicationActions.DELETEAPPLICATION_STARTED === deleteApplicationStatus;
+
     return (
         <Card>
             <BasicModal open={open} onClose={() => setOpen(false)}>
@@ -66,7 +96,14 @@ const ApplicationList = () => {
                 <p><strong>Domain Name:</strong> { application.domain_name }</p>
             </BasicModal>
 
-           <h1>All Applications {applicationLoader && 'Loading...'}</h1>
+           <div style={{ display: "flex", alignContent: "center" }}>
+                <span 
+                    style={{ fontWeight: "bold", fontSize: 25 }}>
+                        All Applications
+                </span>
+                
+                {applicationLoader && <Spinner color="inherit" size={25} />}
+           </div>
 
            <div style={{display: "flex", justifyContent: "flex-end", marginBottom: 20}}>
                 <Button onClick={() => history.push("/dashboard/application/edit")} title="New Application" variant="contained" />
@@ -79,6 +116,9 @@ const ApplicationList = () => {
                     dataKeys={applicationDataKeys} 
                     data={applications} 
                     onView={handleViewApplication}
+                    onEdit={handleEditApplication}
+                    onDelete={handleDeleteApplication}
+                    deleteStatus={deleteApplicationLoader}
                 />
            }
 

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import ViewIcon from '@mui/icons-material/Visibility';
+import Spinner from '../../components/spinner/Spinner';
 
 interface Props {
     tableHeads: string[];
@@ -18,11 +19,21 @@ interface Props {
     onView?: (data: any) => void;
     onDelete?: (data: any) => void;
     onEdit?: (data: any) => void;
+    deleteStatus?: boolean;
 };
 
 export default function BasicTable(props: Props) {
 
-    const {tableHeads, dataKeys, data, onView, onDelete, onEdit} = props; 
+    const [deleteId, setDeleteId] = useState("");
+
+    const {tableHeads, dataKeys, data, onView, onDelete, onEdit, deleteStatus} = props; 
+
+    const handleDelete = (row:any) => {
+      if (onDelete) {
+        onDelete(row); 
+        setDeleteId(row.id);
+      }
+    }
 
   return (
     <TableContainer component={Paper}>
@@ -57,8 +68,9 @@ export default function BasicTable(props: Props) {
                             <EditIcon />
                           </IconButton>
 
-                          <IconButton onClick={() => onDelete && onDelete(rows)}>
-                              <DeleteIcon />
+                          <IconButton onClick={() => handleDelete(rows)}>
+                              { 
+                                deleteStatus && deleteId === rows.id ? <Spinner color="inherit" size={25} /> :  <DeleteIcon /> }
                           </IconButton>
                         </TableCell>
                     </TableRow>

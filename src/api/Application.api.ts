@@ -34,7 +34,7 @@ const deleteApplication = async (id: number) => {
         const response = await axios.delete(`/api/v1/apps/${id}/`);
         return { success: true, payload: response.data }
     } catch {
-        return { success: false, payload: "Could not update application." }
+        return { success: false, payload: "Could not delete application." }
     }
 }
 

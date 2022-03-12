@@ -86,7 +86,9 @@ const applicationReducer = (state = {...initialState}, action: any) => {
         }
 
         case DeleteApplicationActions.DELETEAPPLICATION_SUCCESSFUL: {
-            state = { ...state, deleteApplicationStatus: DeleteApplicationActions.DELETEAPPLICATION_SUCCESSFUL, deleteApplicationError: "" }
+            const applications = state.applications.filter((application: any) => application.id !== action.payload);
+
+            state = { ...state, deleteApplicationStatus: DeleteApplicationActions.DELETEAPPLICATION_SUCCESSFUL, deleteApplicationError: "", applications }
 
             return state;
         }
